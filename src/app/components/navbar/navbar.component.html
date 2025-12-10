@@ -1,0 +1,46 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/" class="logo">
+      <span class="logo-icon">🍺</span>
+      <div class="logo-text">
+        <span class="logo-title">EK Ølbar</span>
+        <span class="logo-subtitle">Din lokale studenter-ølbar</span>
+      </div>
+    </a>
+
+    <nav class="nav-desktop">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+        <span>🏠</span> Hjem
+      </a>
+      <a routerLink="/beer" routerLinkActive="active" class="nav-link">
+        <span>🍺</span> Ølkort
+      </a>
+      <a routerLink="/events" routerLinkActive="active" class="nav-link">
+        <span>📅</span> Events
+      </a>
+      <a routerLink="/contact" routerLinkActive="active" class="nav-link">
+        <span>📍</span> Kontakt
+      </a>
+    </nav>
+
+    <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+      {{ mobileMenuOpen ? '✕' : '☰' }}
+    </button>
+  </div>
+
+  <nav class="nav-mobile" *ngIf="mobileMenuOpen">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" 
+       class="nav-link" (click)="closeMobileMenu()">
+      <span>🏠</span> Hjem
+    </a>
+    <a routerLink="/beer" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+      <span>🍺</span> Ølkort
+    </a>
+    <a routerLink="/events" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+      <span>📅</span> Events
+    </a>
+    <a routerLink="/contact" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+      <span>📍</span> Kontakt
+    </a>
+  </nav>
+</header>

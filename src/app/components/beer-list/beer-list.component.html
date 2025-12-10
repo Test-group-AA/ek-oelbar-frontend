@@ -1,0 +1,79 @@
+<div class="beer-page">
+  <header class="page-header">
+    <h1>🍺 Vores Ølkort</h1>
+    <p>Vi tilbyder et omhyggeligt udvalgt sortiment af kvalitetsøl fra nær og fjern</p>
+  </header>
+
+  <!-- Loading State -->
+  <div class="loading" *ngIf="isLoading">
+    <span class="loading-spinner">🍺</span>
+    <p>Indlæser øl...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error" *ngIf="error">
+    <p>{{ error }}</p>
+    <button (click)="loadBeers()">Prøv igen</button>
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!isLoading && !error">
+    <!-- Fadøl Section -->
+    <section class="beer-section">
+      <div class="section-header">
+        <span class="icon">🍺</span>
+        <h2>Fadøl</h2>
+      </div>
+      <div class="beer-grid" *ngIf="tapBeers.length; else noTapBeers">
+        <article class="beer-card" *ngFor="let beer of tapBeers">
+          <div class="beer-header">
+            <h3>{{ beer.name }}</h3>
+            <span class="price">{{ beer.price }} kr</span>
+          </div>
+          <p class="description">{{ beer.description }}</p>
+          <div class="beer-meta" *ngIf="beer.country || beer.alcoholPercentage">
+            <span *ngIf="beer.country">🌍 {{ beer.country }}</span>
+            <span *ngIf="beer.alcoholPercentage">🍺 {{ beer.alcoholPercentage }}%</span>
+          </div>
+        </article>
+      </div>
+      <ng-template #noTapBeers>
+        <p class="no-beers">Ingen fadøl tilgængelige</p>
+      </ng-template>
+    </section>
+
+    <!-- Flaskeøl Section -->
+    <section class="beer-section">
+      <div class="section-header">
+        <span class="icon">🍾</span>
+        <h2>Flaskeøl</h2>
+      </div>
+      <div class="beer-grid" *ngIf="bottledBeers.length; else noBottledBeers">
+        <article class="beer-card" *ngFor="let beer of bottledBeers">
+          <div class="beer-header">
+            <h3>{{ beer.name }}</h3>
+            <span class="price">{{ beer.price }} kr</span>
+          </div>
+          <p class="description">{{ beer.description }}</p>
+          <div class="beer-meta" *ngIf="beer.country || beer.alcoholPercentage">
+            <span *ngIf="beer.country">🌍 {{ beer.country }}</span>
+            <span *ngIf="beer.alcoholPercentage">🍺 {{ beer.alcoholPercentage }}%</span>
+          </div>
+        </article>
+      </div>
+      <ng-template #noBottledBeers>
+        <p class="no-beers">Ingen flaskeøl tilgængelige</p>
+      </ng-template>
+    </section>
+
+    <!-- Happy Hour Banner -->
+    <section class="happy-hour">
+      <h3>🎉 Studerendes Happy Hour!</h3>
+      <div class="offers">
+        <p><strong>Mandag - Torsdag kl. 16-19:</strong> 20% rabat på alle fadøl</p>
+        <p><strong>Fredag før koncert kl. 18-20:</strong> 2 for 1 på udvalgte flaskeøl</p>
+        <p class="note">* Gyldigt studiekort skal fremvises</p>
+      </div>
+    </section>
+  </ng-container>
+</div>

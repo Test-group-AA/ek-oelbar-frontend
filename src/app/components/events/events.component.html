@@ -1,0 +1,62 @@
+<div class="events-page">
+  <header class="page-header">
+    <h1>🎭 Events & Underholdning</h1>
+    <p>Hver fredag præsenterer vi live underholdning - fra koncerter og tryllekunst til poesi</p>
+  </header>
+
+  <!-- Loading State -->
+  <div class="loading" *ngIf="isLoading">
+    <span class="loading-spinner">🎵</span>
+    <p>Indlæser events...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error" *ngIf="error">
+    <p>{{ error }}</p>
+    <button (click)="loadEvents()">Prøv igen</button>
+  </div>
+
+  <!-- Events List -->
+  <div class="events-list" *ngIf="!isLoading && !error">
+    <article class="event-card" *ngFor="let event of events">
+      <div class="event-date">
+        <span class="emoji">{{ event.emoji }}</span>
+        <span class="date">{{ formatDate(event.date) }}</span>
+      </div>
+      <div class="event-content">
+        <div class="event-header">
+          <div class="event-info">
+            <h3>{{ event.title }}</h3>
+            <p class="artist">{{ event.artist }}</p>
+          </div>
+          <div class="time-badge">
+            🕐 {{ formatTime(event.startTime) }} - {{ formatTime(event.endTime) }}
+          </div>
+        </div>
+        <p class="description">{{ event.description }}</p>
+        <div class="badges">
+          <span class="badge free" *ngIf="event.freeEntry">Gratis entre</span>
+          <span class="badge no-reservation" *ngIf="!event.reservationRequired">Ingen reservation nødvendig</span>
+        </div>
+      </div>
+    </article>
+
+    <p class="no-events" *ngIf="events.length === 0">
+      Ingen kommende events på nuværende tidspunkt.
+    </p>
+  </div>
+
+  <!-- CTA Section -->
+  <section class="cta-section" *ngIf="!isLoading && !error">
+    <div class="cta-icon">🎵</div>
+    <div class="cta-content">
+      <h3>Vil du optræde hos os?</h3>
+      <p>Vi er altid på udkig efter lokale talenter!</p>
+      <p class="cta-description">
+        Er du musiker, poet, tryllekunstner eller har andre talenter? 
+        Kontakt os for at høre om muligheder for at optræde på vores fredag events.
+      </p>
+      <a routerLink="/contact" class="cta-button">Kontakt os</a>
+    </div>
+  </section>
+</div>

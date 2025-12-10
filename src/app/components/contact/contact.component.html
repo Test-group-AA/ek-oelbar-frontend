@@ -1,0 +1,135 @@
+<!-- src/app/components/contact/contact.component.html -->
+<div class="contact-page">
+  <header class="page-header">
+    <h1>📍 Kontakt & Find os</h1>
+  </header>
+
+  <div class="contact-grid">
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <h2>Kontaktoplysninger</h2>
+
+      <div class="info-card">
+        <span class="icon">📞</span>
+        <div>
+          <h3>Telefon</h3>
+          <p>+45 33 12 34 56</p>
+          <small>Man-Fre: 15:00 - 01:00 | Lør-Søn: 14:00 - 02:00</small>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <span class="icon">✉️</span>
+        <div>
+          <h3>E-mail</h3>
+          <p>info&#64;ekbeerbar.dk</p>
+          <small>Vi svarer indenfor 24 timer</small>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <span class="icon">📍</span>
+        <div>
+          <h3>Adresse</h3>
+          <p>Guldbergsgade 29N</p>
+          <p>2200 København N</p>
+          <small>5 minutters gang fra KEA</small>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <span class="icon">🕐</span>
+        <div>
+          <h3>Åbningstider</h3>
+          <p><strong>Man - Tor:</strong> 15:00 - 01:00</p>
+          <p><strong>Fredag:</strong> 15:00 - 02:00</p>
+          <p><strong>Lørdag:</strong> 14:00 - 02:00</p>
+          <p><strong>Søndag:</strong> 14:00 - 23:00</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+      <h2>Find os her</h2>
+      <div class="map-placeholder">
+        <span class="map-icon">📍</span>
+        <div class="map-info">
+          <p><strong>EK Ølbar</strong></p>
+          <p>Guldbergsgade 29N, 2200 København N</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Guldbergsgade+29N+2200+København+N"
+             target="_blank"
+             rel="noopener noreferrer">
+            Åbn i Google Maps →
+          </a>
+        </div>
+      </div>
+      <div class="transport-info">
+        <h3>🚇 Transport</h3>
+        <p><strong>Metro:</strong> Nørrebro St. (5 min gang)</p>
+        <p><strong>Bus:</strong> 5A, 350S ved Korsgade</p>
+        <p><strong>Cykel:</strong> Cykelparkeringsstativer udenfor</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Form -->
+  <section class="contact-form-section">
+    <h2>Send os en besked</h2>
+
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="submitSuccess">
+      ✅ Tak for din besked! Vi vender tilbage hurtigst muligt.
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="submitError">
+      ❌ {{ submitError }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Navn *</label>
+          <input type="text"
+                 id="name"
+                 name="name"
+                 [(ngModel)]="form.name"
+                 placeholder="Dit navn"
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input type="email"
+                 id="email"
+                 name="email"
+                 [(ngModel)]="form.email"
+                 placeholder="din@email.dk"
+                 required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="subject">Emne</label>
+        <input type="text"
+               id="subject"
+               name="subject"
+               [(ngModel)]="form.subject"
+               placeholder="Hvad drejer det sig om?">
+      </div>
+      <div class="form-group">
+        <label for="message">Besked *</label>
+        <textarea id="message"
+                  name="message"
+                  [(ngModel)]="form.message"
+                  rows="6"
+                  placeholder="Skriv din besked her..."
+                  required></textarea>
+      </div>
+      <button type="submit"
+              class="submit-btn"
+              [disabled]="isSubmitting || !isFormValid()">
+        {{ isSubmitting ? 'Sender...' : 'Send besked' }}
+      </button>
+    </form>
+  </section>
+</div>

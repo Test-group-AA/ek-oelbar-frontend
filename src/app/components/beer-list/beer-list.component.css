@@ -1,0 +1,174 @@
+.beer-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.page-header {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.page-header h1 {
+  color: #78350f;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 1rem;
+}
+
+.loading-spinner {
+  font-size: 3rem;
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error {
+  text-align: center;
+  padding: 2rem;
+  background: #fef2f2;
+  border-radius: 1rem;
+  color: #991b1b;
+}
+
+.error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+/* Beer Sections */
+.beer-section {
+  margin-bottom: 1rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header .icon {
+  font-size: 2rem;
+}
+
+.section-header h2 {
+  color: #78350f;
+  font-size: 2rem;
+}
+
+.beer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.beer-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.beer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.beer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+}
+
+.beer-header h3 {
+  color: #78350f;
+  font-size: 1.25rem;
+}
+
+.price {
+  background: #d97706;
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.description {
+  color: #4b5563;
+  margin-bottom: 0.75rem;
+}
+
+.beer-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #78350f;
+}
+
+.no-beers {
+  color: #6b7280;
+  font-style: italic;
+  padding: 1rem;
+}
+
+/* Happy Hour Banner */
+.happy-hour {
+  background: linear-gradient(135deg, #22c55e 0%, #059669 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.happy-hour h3 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.offers p {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.note {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .beer-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,62 @@
+<div class="home-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-icon">🍺</span>
+      <h1>EK Ølbar</h1>
+      <p class="subtitle">Din nye yndlings ølbar i København</p>
+      <div class="hero-buttons">
+        <a routerLink="/beer" class="btn btn-primary">Se vores øl</a>
+        <a routerLink="/events" class="btn btn-outline">Kommende events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Welcome Section -->
+  <section class="card welcome-section">
+    <h2>Velkommen til EK Ølbar</h2>
+    <div class="prose">
+      <p>
+        Hos EK Ølbar kombinerer vi det bedste fra den klassiske ølbar-tradition 
+        med en moderne og studentervenlig atmosfære. Beliggende i hjertet af København, 
+        er vi det perfekte sted for studerende fra KEA og andre institutioner til at 
+        slappe af efter en lang dag med forelæsninger.
+      </p>
+      <p>
+        Vi tilbyder et omhyggeligt udvalgt sortiment af både danske klassikere og 
+        spændende håndværksøl fra ind- og udland. Vores hyggelige lokaler og 
+        venskabelige personale sikrer, at du altid føler dig velkommen.
+      </p>
+      <p class="highlight">
+        Hver fredag byder vi på live underholdning - fra jazz og rock til tryllekunst og poesi!
+      </p>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="features-section">
+    <h2>Stemningen hos os</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <span class="feature-emoji">{{ feature.emoji }}</span>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- History Timeline -->
+  <section class="card timeline-section">
+    <h2>Vores Historie</h2>
+    <div class="timeline">
+      <div class="timeline-item" *ngFor="let item of history">
+        <div class="timeline-year">{{ item.year }}</div>
+        <div class="timeline-content">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
