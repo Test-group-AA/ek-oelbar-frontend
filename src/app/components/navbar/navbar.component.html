@@ -9,18 +9,21 @@
     </a>
 
     <nav class="nav-desktop">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" data-testid="nav-home">
         <span>🏠</span> Hjem
       </a>
-      <a routerLink="/beer" routerLinkActive="active" class="nav-link">
+      <a routerLink="/beer" routerLinkActive="active" class="nav-link" data-testid="nav-beer">
         <span>🍺</span> Ølkort
       </a>
-      <a routerLink="/events" routerLinkActive="active" class="nav-link">
+      <a routerLink="/events" routerLinkActive="active" class="nav-link" data-testid="nav-events">
         <span>📅</span> Events
       </a>
-      <a routerLink="/contact" routerLinkActive="active" class="nav-link">
+      <a routerLink="/contact" routerLinkActive="active" class="nav-link" data-testid="nav-contact">
         <span>📍</span> Kontakt
       </a>
+      
+      <!-- NEW: Cart Badge -->
+      <app-cart-badge></app-cart-badge>
     </nav>
 
     <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
@@ -30,17 +33,22 @@
 
   <nav class="nav-mobile" *ngIf="mobileMenuOpen">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" 
-       class="nav-link" (click)="closeMobileMenu()">
+       class="nav-link" data-testid="nav-home" (click)="closeMobileMenu()">
       <span>🏠</span> Hjem
     </a>
-    <a routerLink="/beer" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+    <a routerLink="/beer" routerLinkActive="active" class="nav-link" data-testid="nav-beer" (click)="closeMobileMenu()">
       <span>🍺</span> Ølkort
     </a>
-    <a routerLink="/events" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+    <a routerLink="/events" routerLinkActive="active" class="nav-link" data-testid="nav-events" (click)="closeMobileMenu()">
       <span>📅</span> Events
     </a>
-    <a routerLink="/contact" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+    <a routerLink="/contact" routerLinkActive="active" class="nav-link" data-testid="nav-contact" (click)="closeMobileMenu()">
       <span>📍</span> Kontakt
+    </a>
+    
+    <!-- Cart link for mobile -->
+    <a routerLink="/order" class="nav-link cart-link" (click)="closeMobileMenu()">
+      <span>🛒</span> Kurv
     </a>
   </nav>
 </header>

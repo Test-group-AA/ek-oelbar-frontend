@@ -1,0 +1,93 @@
+<div class="modal-backdrop" data-testid="beer-modal" *ngIf="beer" (click)="onBackdropClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="close-btn" data-testid="close-modal" (click)="onClose()" aria-label="Close modal">
+      ✕
+    </button>
+
+    <!-- Beer Info -->
+    <div class="modal-header">
+      <div class="beer-icon">🍺</div>
+      <h2>{{ beer.name }}</h2>
+      <div class="beer-type-badge" [class.tap]="beer.type === 'TAP'" [class.bottled]="beer.type === 'BOTTLED'">
+        {{ beer.type === 'TAP' ? '🍺 Fadøl' : '🍾 Flaskeøl' }}
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <!-- Description -->
+      <div class="section">
+        <h3>Beskrivelse</h3>
+        <p class="description">{{ beer.description || 'Ingen beskrivelse tilgængelig' }}</p>
+      </div>
+
+      <!-- Details -->
+      <div class="section details-grid">
+        <div class="detail-item" *ngIf="beer.country">
+          <span class="label">🌍 Oprindelse</span>
+          <span class="value">{{ beer.country }}</span>
+        </div>
+        <div class="detail-item" *ngIf="beer.alcoholPercentage">
+          <span class="label">🍺 Alkohol</span>
+          <span class="value">{{ beer.alcoholPercentage }}%</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">💰 Pris</span>
+          <span class="value price">{{ beer.price }} kr</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">📦 I kurv</span>
+          <span class="value">{{ getQuantityInCart() }} stk</span>
+        </div>
+      </div>
+
+      <!-- Mock Reviews -->
+      <div class="section">
+        <h3>⭐ Bedømmelser</h3>
+        <div class="rating-summary">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <span class="rating-text">4.5 / 5.0 (42 anmeldelser)</span>
+        </div>
+        <div class="reviews">
+          <div class="review">
+            <div class="review-header">
+              <span class="reviewer">👤 Anders K.</span>
+              <span class="review-stars">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="review-text">"Fantastisk øl! Perfekt balance."</p>
+          </div>
+          <div class="review">
+            <div class="review-header">
+              <span class="reviewer">👤 Maria S.</span>
+              <span class="review-stars">⭐⭐⭐⭐</span>
+            </div>
+            <p class="review-text">"Rigtig god, men lidt for bitter for mig."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="section quantity-section">
+        <h3>Vælg antal</h3>
+        <div class="quantity-controls">
+          <button class="qty-btn" data-testid="decrease-quantity" (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+          <span class="quantity-display" data-testid="quantity-display">{{ quantity }}</span>
+          <button class="qty-btn" data-testid="increase-quantity" (click)="increaseQuantity()" [disabled]="quantity >= 10">+</button>
+        </div>
+        <p class="quantity-note">Max 10 stk per ordre</p>
+      </div>
+    </div>
+
+    <!-- Footer with Actions -->
+    <div class="modal-footer">
+      <div class="total-price">
+        <span class="label">Total:</span>
+        <span class="amount">{{ beer.price * quantity }} kr</span>
+      </div>
+      <button class="add-to-cart-btn" data-testid="modal-add-to-cart" (click)="addToCart()" [class.added]="showAddedFeedback">
+        <span *ngIf="!showAddedFeedback">🛒 Tilføj til kurv</span>
+        <span *ngIf="showAddedFeedback">✅ Tilføjet!</span>
+      </button>
+    </div>
+  </div>
+</div>

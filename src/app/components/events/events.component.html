@@ -18,26 +18,38 @@
 
   <!-- Events List -->
   <div class="events-list" *ngIf="!isLoading && !error">
-    <article class="event-card" *ngFor="let event of events">
+    <article class="event-card" data-testid="event-card" *ngFor="let event of events">
       <div class="event-date">
         <span class="emoji">{{ event.emoji }}</span>
-        <span class="date">{{ formatDate(event.date) }}</span>
+        <span class="date" data-testid="event-date">{{ formatDate(event.date) }}</span>
       </div>
       <div class="event-content">
         <div class="event-header">
           <div class="event-info">
-            <h3>{{ event.title }}</h3>
-            <p class="artist">{{ event.artist }}</p>
+            <h3 data-testid="event-title">{{ event.title }}</h3>
+            <p class="artist" data-testid="event-artist">{{ event.artist }}</p>
           </div>
           <div class="time-badge">
-            🕐 {{ formatTime(event.startTime) }} - {{ formatTime(event.endTime) }}
+            🕗 {{ formatTime(event.startTime) }} - {{ formatTime(event.endTime) }}
           </div>
         </div>
         <p class="description">{{ event.description }}</p>
         <div class="badges">
-          <span class="badge free" *ngIf="event.freeEntry">Gratis entre</span>
-          <span class="badge no-reservation" *ngIf="!event.reservationRequired">Ingen reservation nødvendig</span>
+          <span class="badge free" *ngIf="event.freeEntry">Gratis entré</span>
+          <span class="badge reservation" *ngIf="event.reservationRequired">
+            Reservation anbefales
+          </span>
+          <span class="badge no-reservation" *ngIf="!event.reservationRequired">
+            Ingen reservation nødvendig
+          </span>
         </div>
+
+        <!-- NEW: Quick Reservation Widget -->
+        <app-quick-reservation 
+          *ngIf="event.reservationRequired"
+          [event]="event"
+          (success)="onReservationSuccess()">
+        </app-quick-reservation>
       </div>
     </article>
 

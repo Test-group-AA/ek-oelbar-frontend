@@ -1,0 +1,98 @@
+<!-- src/app/components/quick-reservation/quick-reservation.component.html -->
+<div class="quick-reservation">
+  <!-- Reserve Button (when form is closed) -->
+  <button 
+    *ngIf="!showForm" 
+    class="reserve-btn" 
+    data-testid="reserve-button"
+    (click)="openForm()"
+    [disabled]="availableSpots === 0">
+    <span *ngIf="availableSpots > 0">🎫 Reservér</span>
+    <span *ngIf="availableSpots === 0">❌ Udsolgt</span>
+  </button>
+
+  <!-- Available Spots Badge -->
+  <div class="spots-badge" *ngIf="!showForm && availableSpots > 0">
+    {{ availableSpots }} pladser tilbage
+  </div>
+
+  <!-- Reservation Form (when opened) -->
+  <div class="reservation-form" data-testid="reservation-form" *ngIf="showForm">
+    <div class="form-header">
+      <h4>✨ Reservér til {{ event.title }}</h4>
+      <button class="close-btn" (click)="closeForm()">✕</button>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="submitSuccess">
+      ✅ Reservation oprettet! Du modtager en bekræftelse på email.
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="submitError">
+      ❌ {{ submitError }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" *ngIf="!submitSuccess">
+      <!-- Available Spots Info -->
+      <div class="spots-info">
+        <span class="spots-icon">🎫</span>
+        <span class="spots-text">{{ availableSpots }} pladser tilbage</span>
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="quick-name">Dit navn *</label>
+        <input 
+          type="text" 
+          id="quick-name"
+          data-testid="reservation-name"
+          [(ngModel)]="form.customerName"
+          name="customerName"
+          placeholder="John Doe"
+          required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="quick-email">Email *</label>
+        <input 
+          type="email" 
+          id="quick-email"
+          data-testid="reservation-email"
+          [(ngModel)]="form.customerEmail"
+          name="customerEmail"
+          placeholder="john@example.com"
+          required>
+      </div>
+
+      <!-- Number of Guests -->
+      <div class="form-group">
+        <label for="quick-guests">Antal gæster (1-20) *</label>
+        <input 
+          type="number" 
+          id="quick-guests"
+          data-testid="reservation-guests"
+          [(ngModel)]="form.numberOfGuests"
+          name="numberOfGuests"
+          min="1"
+          max="20"
+          required>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="closeForm()">
+          Annuller
+        </button>
+        <button 
+          type="submit" 
+          class="btn-submit"
+          data-testid="confirm-reservation"
+          [disabled]="!isFormValid() || isSubmitting">
+          {{ isSubmitting ? 'Reserverer...' : 'Bekræft reservation' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

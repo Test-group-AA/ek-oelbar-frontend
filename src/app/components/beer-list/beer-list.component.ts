@@ -1,12 +1,15 @@
+// src/app/components/beer-list/beer-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BeerService } from '../../services/beer.service';
+import { CartService } from '../../services/cart.service';
 import { Beer } from '../../models/beer.model';
+import { BeerDetailModalComponent } from '../beer-detail-modal/beer-detail-modal.component';
 
 @Component({
   selector: 'app-beer-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BeerDetailModalComponent],
   templateUrl: './beer-list.component.html',
   styleUrl: './beer-list.component.css'
 })
@@ -15,8 +18,12 @@ export class BeerListComponent implements OnInit {
   bottledBeers: Beer[] = [];
   isLoading = true;
   error: string | null = null;
+  selectedBeer: Beer | null = null;
 
-  constructor(private beerService: BeerService) {}
+  constructor(
+    private beerService: BeerService,
+    public cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.loadBeers();
@@ -55,5 +62,22 @@ export class BeerListComponent implements OnInit {
     if (this.tapBeers.length > 0 || this.bottledBeers.length > 0) {
       this.isLoading = false;
     }
+  }
+
+  openBeerDetail(beer: Beer): void {
+    this.selectedBeer = beer;
+  }
+
+  closeBeerDetail(): void {
+    this.selectedBeer = null;
+  }
+
+  addToCart(beer: Beer, event: Event): void {
+    event.stopPropagation(); // Prevent opening modal when clicking add button
+    this.cartService.addToCart(beer, 1);
+  }
+
+  getQuantityInCart(beerId: number): number {
+    return this.cartService.getQuantity(beerId);
   }
 }

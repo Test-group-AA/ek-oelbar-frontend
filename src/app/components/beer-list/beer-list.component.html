@@ -19,21 +19,32 @@
   <!-- Content -->
   <ng-container *ngIf="!isLoading && !error">
     <!-- Fadøl Section -->
-    <section class="beer-section">
+    <section class="beer-section" data-testid="tap-beers-section">
       <div class="section-header">
         <span class="icon">🍺</span>
         <h2>Fadøl</h2>
       </div>
       <div class="beer-grid" *ngIf="tapBeers.length; else noTapBeers">
-        <article class="beer-card" *ngFor="let beer of tapBeers">
+        <article class="beer-card" *ngFor="let beer of tapBeers" [attr.data-testid]="'beer-card-' + beer.id" (click)="openBeerDetail(beer)">
           <div class="beer-header">
-            <h3>{{ beer.name }}</h3>
-            <span class="price">{{ beer.price }} kr</span>
+            <h3 data-testid="beer-name">{{ beer.name }}</h3>
+            <span class="price" data-testid="beer-price">{{ beer.price }} kr</span>
           </div>
           <p class="description">{{ beer.description }}</p>
           <div class="beer-meta" *ngIf="beer.country || beer.alcoholPercentage">
             <span *ngIf="beer.country">🌍 {{ beer.country }}</span>
             <span *ngIf="beer.alcoholPercentage">🍺 {{ beer.alcoholPercentage }}%</span>
+          </div>
+          
+          <!-- Cart Actions -->
+          <div class="beer-actions">
+            <button class="add-to-cart-btn" [attr.data-testid]="'add-to-cart-' + beer.id" (click)="addToCart(beer, $event)">
+              <span class="btn-icon">🛒</span>
+              <span class="btn-text">Tilføj</span>
+            </button>
+            <span class="in-cart-badge" *ngIf="getQuantityInCart(beer.id!) > 0">
+              {{ getQuantityInCart(beer.id!) }} i kurv
+            </span>
           </div>
         </article>
       </div>
@@ -43,21 +54,32 @@
     </section>
 
     <!-- Flaskeøl Section -->
-    <section class="beer-section">
+    <section class="beer-section" data-testid="bottled-beers-section">
       <div class="section-header">
         <span class="icon">🍾</span>
         <h2>Flaskeøl</h2>
       </div>
       <div class="beer-grid" *ngIf="bottledBeers.length; else noBottledBeers">
-        <article class="beer-card" *ngFor="let beer of bottledBeers">
+        <article class="beer-card" *ngFor="let beer of bottledBeers" [attr.data-testid]="'beer-card-' + beer.id" (click)="openBeerDetail(beer)">
           <div class="beer-header">
-            <h3>{{ beer.name }}</h3>
-            <span class="price">{{ beer.price }} kr</span>
+            <h3 data-testid="beer-name">{{ beer.name }}</h3>
+            <span class="price" data-testid="beer-price">{{ beer.price }} kr</span>
           </div>
           <p class="description">{{ beer.description }}</p>
           <div class="beer-meta" *ngIf="beer.country || beer.alcoholPercentage">
             <span *ngIf="beer.country">🌍 {{ beer.country }}</span>
             <span *ngIf="beer.alcoholPercentage">🍺 {{ beer.alcoholPercentage }}%</span>
+          </div>
+          
+          <!-- Cart Actions -->
+          <div class="beer-actions">
+            <button class="add-to-cart-btn" [attr.data-testid]="'add-to-cart-' + beer.id" (click)="addToCart(beer, $event)">
+              <span class="btn-icon">🛒</span>
+              <span class="btn-text">Tilføj</span>
+            </button>
+            <span class="in-cart-badge" *ngIf="getQuantityInCart(beer.id!) > 0">
+              {{ getQuantityInCart(beer.id!) }} i kurv
+            </span>
           </div>
         </article>
       </div>
@@ -77,3 +99,9 @@
     </section>
   </ng-container>
 </div>
+
+<!-- Beer Detail Modal -->
+<app-beer-detail-modal 
+  [beer]="selectedBeer" 
+  (close)="closeBeerDetail()">
+</app-beer-detail-modal>

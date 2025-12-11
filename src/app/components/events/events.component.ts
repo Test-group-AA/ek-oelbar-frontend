@@ -1,13 +1,15 @@
+// src/app/components/events/events.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.model';
+import { QuickReservationComponent } from '../quick-reservation/quick-reservation.component';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, QuickReservationComponent],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
@@ -50,5 +52,10 @@ export class EventsComponent implements OnInit {
 
   formatTime(timeStr: string): string {
     return timeStr.substring(0, 5);
+  }
+
+  onReservationSuccess(): void {
+    // Reload events to update available spots
+    this.loadEvents();
   }
 }

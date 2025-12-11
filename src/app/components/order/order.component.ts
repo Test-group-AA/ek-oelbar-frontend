@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
 import { BeerService } from '../../services/beer.service';
+import { CartService } from '../../services/cart.service';
 import { Order, OrderLine, OrderStatus } from '../../models/order.model';
 import { Beer } from '../../models/beer.model';
 
@@ -30,11 +31,17 @@ export class OrderComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private beerService: BeerService
+    private beerService: BeerService,
+    public cartService: CartService
   ) {}
 
   ngOnInit(): void {
     this.loadBeers();
+    
+    // Auto-create order if cart has items
+    if (this.cartService.getCartCount() > 0 && !this.currentOrder) {
+      // Show cart items preview
+    }
   }
 
   loadBeers(): void {
@@ -46,7 +53,7 @@ export class OrderComponent implements OnInit {
 
   createOrder(): void {
     if (this.customerAge < 18) {
-      this.error = 'You must be 18 or older to order';
+      this.error = 'Du skal være mindst 18 år for at bestille';
       return;
     }
 
@@ -60,14 +67,44 @@ export class OrderComponent implements OnInit {
       next: (order) => {
         this.currentOrder = order;
         this.orderLines = [];
-        this.success = 'Order created!';
+        this.success = 'Ordre oprettet!';
         this.isLoading = false;
+        
+        // Add cart items to order
+        this.addCartItemsToOrder();
       },
       error: (err) => {
-        this.error = err.error || 'Could not create order';
+        this.error = err.error || 'Kunne ikke oprette ordre';
         this.isLoading = false;
       }
     });
+  }
+
+  addCartItemsToOrder(): void {
+    const cartItems = this.cartService.getCartItems();
+    
+    if (cartItems.length === 0 || !this.currentOrder) {
+      return;
+    }
+
+    // Add each cart item to the order
+    cartItems.forEach(item => {
+      this.orderService.addBeerToOrder(this.currentOrder!.id!, {
+        beerId: item.beer.id!,
+        quantity: item.quantity
+      }).subscribe({
+        next: (order) => {
+          this.currentOrder = order;
+          this.loadOrderLines();
+        },
+        error: (err) => {
+          console.error('Error adding cart item:', err);
+        }
+      });
+    });
+
+    // Clear cart after adding to order
+    this.cartService.clearCart();
   }
 
   addBeer(): void {
@@ -81,11 +118,11 @@ export class OrderComponent implements OnInit {
       next: (order) => {
         this.currentOrder = order;
         this.loadOrderLines();
-        this.success = 'Beer added!';
+        this.success = 'Øl tilføjet!';
         this.isLoading = false;
       },
       error: (err) => {
-        this.error = err.error || 'Could not add beer';
+        this.error = err.error || 'Kunne ikke tilføje øl';
         this.isLoading = false;
       }
     });
@@ -128,11 +165,11 @@ export class OrderComponent implements OnInit {
     method.subscribe({
       next: (order) => {
         this.currentOrder = order;
-        this.success = `Order ${action}ed!`;
+        this.success = `Ordre ${action}ed!`;
         this.isLoading = false;
       },
       error: (err) => {
-        this.error = err.error || `Could not ${action} order`;
+        this.error = err.error || `Kunne ikke ${action} ordre`;
         this.isLoading = false;
       }
     });
@@ -168,5 +205,13 @@ export class OrderComponent implements OnInit {
   canCancel(): boolean {
     return this.currentOrder?.status === OrderStatus.CREATED || 
            this.currentOrder?.status === OrderStatus.CONFIRMED;
+  }
+
+  getCartCount(): number {
+    return this.cartService.getCartCount();
+  }
+
+  getCartTotal(): number {
+    return this.cartService.getCartTotal();
   }
 }

@@ -92,6 +92,8 @@
   padding: 1.5rem;
   border-radius: 1rem;
   transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
 }
 
 .beer-card:hover {
@@ -131,6 +133,57 @@
   gap: 1rem;
   font-size: 0.85rem;
   color: #78350f;
+  margin-bottom: 1rem;
+}
+
+/* NEW: Beer Card Actions */
+.beer-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  background: #d97706;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background: #b45309;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(217, 119, 6, 0.3);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.98);
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+.in-cart-badge {
+  background: #16a34a;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .no-beers {
@@ -170,5 +223,13 @@
 
   .beer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .beer-actions {
+    flex-direction: column;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
   }
 }

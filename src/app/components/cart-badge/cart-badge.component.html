@@ -1,0 +1,50 @@
+<!-- src/app/components/cart-badge/cart-badge.component.html -->
+<div class="cart-badge-container">
+  <button class="cart-badge" data-testid="cart-badge" (click)="togglePreview()" [class.has-items]="cartCount > 0">
+    <span class="cart-icon">🛒</span>
+    <span class="cart-count" data-testid="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+  </button>
+
+  <!-- Mini Cart Preview -->
+  <div class="cart-preview" data-testid="cart-preview" *ngIf="showPreview" (click)="$event.stopPropagation()">
+    <div class="preview-header">
+      <h3>Din kurv</h3>
+      <button class="close-preview" (click)="closePreview()">✕</button>
+    </div>
+
+    <div class="preview-content" *ngIf="cartService.getCartItems().length > 0; else emptyCart">
+      <div class="cart-items">
+        <div class="cart-item" data-testid="cart-item" *ngFor="let item of cartService.getCartItems()">
+          <div class="item-info">
+            <span class="item-name">{{ item.beer.name }}</span>
+            <span class="item-quantity">× {{ item.quantity }}</span>
+          </div>
+          <span class="item-price">{{ item.beer.price * item.quantity }} kr</span>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <div class="total">
+          <span>Total:</span>
+          <span class="total-amount" data-testid="cart-total">{{ cartService.getCartTotal() }} kr</span>
+        </div>
+        <a routerLink="/order" class="checkout-btn" data-testid="checkout-button" (click)="closePreview()">
+          Gå til checkout
+        </a>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <span class="empty-icon">🛒</span>
+        <p>Din kurv er tom</p>
+        <a routerLink="/beer" class="browse-btn" (click)="closePreview()">
+          Se vores øl
+        </a>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="preview-backdrop" data-testid="cart-backdrop" *ngIf="showPreview" (click)="closePreview()"></div>
