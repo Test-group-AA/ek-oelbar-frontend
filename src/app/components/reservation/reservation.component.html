@@ -1,0 +1,85 @@
+<!-- src/app/components/reservation/reservation.component.html -->
+<div class="reservation-page">
+  <header class="page-header">
+    <h1>🎫 Event Reservations</h1>
+    <p>Reserve your spot for upcoming events</p>
+  </header>
+
+  <!-- Messages -->
+  <div class="message success" *ngIf="success">✅ {{ success }}</div>
+  <div class="message error" *ngIf="error">❌ {{ error }}</div>
+
+  <div class="content-grid">
+    <!-- Create Reservation Form -->
+    <section class="card">
+      <h2>Make a Reservation</h2>
+      
+      <div class="form-group">
+        <label for="event">Select Event</label>
+        <select id="event" [(ngModel)]="selectedEventId" (change)="onEventChange()">
+          <option [ngValue]="null">Choose an event...</option>
+          <option *ngFor="let event of events" [ngValue]="event.id">
+            {{ event.emoji }} {{ event.title }} - {{ formatDate(event.date) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="available-spots" *ngIf="selectedEventId">
+        <span class="spots-count">{{ availableSpots }}</span> spots available
+      </div>
+
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" [(ngModel)]="customerName" placeholder="John Doe">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="customerEmail" placeholder="john@example.com">
+      </div>
+
+      <div class="form-group">
+        <label for="guests">Number of Guests (1-20)</label>
+        <input type="number" id="guests" [(ngModel)]="numberOfGuests" min="1" max="20">
+      </div>
+
+      <button class="btn btn-primary" (click)="createReservation()" 
+              [disabled]="isLoading || !selectedEventId || !customerName || !customerEmail">
+        {{ isLoading ? 'Creating...' : 'Make Reservation' }}
+      </button>
+    </section>
+
+    <!-- Reservations List -->
+    <section class="card">
+      <h2>Your Reservations</h2>
+      
+      <div class="reservations-list" *ngIf="reservations.length > 0">
+        <div class="reservation-item" *ngFor="let res of reservations">
+          <div class="res-header">
+            <span class="res-event">{{ res.event.title }}</span>
+            <span class="status-badge" [ngClass]="getStatusClass(res.status)">
+              {{ res.status }}
+            </span>
+          </div>
+          <div class="res-details">
+            <span>👤 {{ res.customerName }}</span>
+            <span>👥 {{ res.numberOfGuests }} guests</span>
+          </div>
+          <div class="res-actions" *ngIf="res.status !== 'CANCELLED'">
+            <button class="btn-small btn-confirm" *ngIf="res.status === 'PENDING'" 
+                    (click)="confirmReservation(res.id!)">
+              Confirm
+            </button>
+            <button class="btn-small btn-cancel" (click)="cancelReservation(res.id!)">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="no-reservations" *ngIf="reservations.length === 0">
+        No reservations yet.
+      </p>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<!-- src/app/components/weather-widget/weather-widget.component.html -->
+<div class="weather-widget">
+  <div class="weather-content" *ngIf="!isLoading && weather?.success">
+    <span class="weather-emoji">{{ getWeatherEmoji(weather!.condition) }}</span>
+    <div class="weather-info">
+      <span class="temperature">{{ weather!.temperature | number:'1.0-0' }}°C</span>
+      <span class="condition">{{ weather!.condition }}</span>
+      <span class="city">{{ weather!.city }}</span>
+    </div>
+  </div>
+
+  <div class="weather-loading" *ngIf="isLoading">
+    <span>🌤️</span> Loading...
+  </div>
+
+  <div class="weather-error" *ngIf="error">
+    <span>⚠️</span> {{ error }}
+  </div>
+</div>

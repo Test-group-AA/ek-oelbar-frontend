@@ -1,0 +1,96 @@
+<!-- src/app/components/order/order.component.html -->
+<div class="order-page">
+  <header class="page-header">
+    <h1>🍺 Place Order</h1>
+    <p>Order your favorite beers</p>
+  </header>
+
+  <!-- Messages -->
+  <div class="message success" *ngIf="success">✅ {{ success }}</div>
+  <div class="message error" *ngIf="error">❌ {{ error }}</div>
+
+  <!-- Create Order Form -->
+  <section class="card" *ngIf="!currentOrder">
+    <h2>Start New Order</h2>
+    <div class="form-group">
+      <label for="age">Your Age</label>
+      <input type="number" id="age" [(ngModel)]="customerAge" min="18" max="120">
+    </div>
+    <div class="form-group checkbox">
+      <input type="checkbox" id="student" [(ngModel)]="hasStudentCard">
+      <label for="student">I have a student card (10% discount)</label>
+    </div>
+    <button class="btn btn-primary" (click)="createOrder()" [disabled]="isLoading">
+      {{ isLoading ? 'Creating...' : 'Start Order' }}
+    </button>
+  </section>
+
+  <!-- Current Order -->
+  <section class="card" *ngIf="currentOrder">
+    <div class="order-header">
+      <h2>Order #{{ currentOrder.id }}</h2>
+      <span class="status-badge" [ngClass]="getStatusClass(currentOrder.status)">
+        {{ currentOrder.status }}
+      </span>
+    </div>
+
+    <!-- Add Beer Form -->
+    <div class="add-beer-form" *ngIf="canAddBeers()">
+      <h3>Add Beer</h3>
+      <div class="form-row">
+        <select [(ngModel)]="selectedBeerId">
+          <option [ngValue]="null">Select a beer...</option>
+          <option *ngFor="let beer of beers" [ngValue]="beer.id">
+            {{ beer.name }} - {{ beer.price }} kr
+          </option>
+        </select>
+        <input type="number" [(ngModel)]="quantity" min="1" max="10" placeholder="Qty">
+        <button class="btn btn-secondary" (click)="addBeer()" [disabled]="!selectedBeerId || isLoading">
+          Add
+        </button>
+      </div>
+    </div>
+
+    <!-- Order Lines -->
+    <div class="order-lines" *ngIf="orderLines.length > 0">
+      <h3>Items</h3>
+      <div class="line-item" *ngFor="let line of orderLines">
+        <span class="item-name">{{ line.beer.name }}</span>
+        <span class="item-qty">x{{ line.quantity }}</span>
+        <span class="item-price">{{ line.lineTotal }} kr</span>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>{{ currentOrder.totalPrice }} kr</span>
+      </div>
+      <div class="summary-row discount" *ngIf="currentOrder.discountPercent > 0">
+        <span>Discount ({{ currentOrder.discountPercent }}%):</span>
+        <span>-{{ currentOrder.totalPrice - currentOrder.finalPrice }} kr</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span>{{ currentOrder.finalPrice }} kr</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="order-actions">
+      <button class="btn btn-confirm" *ngIf="canConfirm()" (click)="confirmOrder()" [disabled]="isLoading">
+        Confirm Order
+      </button>
+      <button class="btn btn-pay" *ngIf="canPay()" (click)="payOrder()" [disabled]="isLoading">
+        Pay Now
+      </button>
+      <button class="btn btn-complete" *ngIf="canComplete()" (click)="completeOrder()" [disabled]="isLoading">
+        Mark Complete
+      </button>
+      <button class="btn btn-cancel" *ngIf="canCancel()" (click)="cancelOrder()" [disabled]="isLoading">
+        Cancel Order
+      </button>
+    </div>
+  </section>
+</div>

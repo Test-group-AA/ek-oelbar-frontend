@@ -1,0 +1,54 @@
+/* src/app/components/weather-widget/weather-widget.component.css */
+.weather-widget {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.weather-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.weather-emoji {
+  font-size: 2rem;
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.temperature {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.condition {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.city {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.weather-loading,
+.weather-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.weather-error {
+  color: #fecaca;
+}
