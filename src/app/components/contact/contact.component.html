@@ -38,7 +38,7 @@
       </div>
 
       <div class="info-card">
-        <span class="icon">🕗</span>
+        <span class="icon">🕐</span>
         <div>
           <h3>Åbningstider</h3>
           <p><strong>Man - Tor:</strong> 15:00 - 01:00</p>
@@ -70,6 +70,12 @@
         <p><strong>Bus:</strong> 5A, 350S ved Korsgade</p>
         <p><strong>Cykel:</strong> Cykelparkeringsstativer udenfor</p>
       </div>
+
+      <!-- NEW: Weather Widget -->
+      <div class="weather-section">
+        <h3>🌤️ Vejret lige nu</h3>
+        <app-weather-widget></app-weather-widget>
+      </div>
     </div>
   </div>
 
@@ -84,7 +90,7 @@
 
     <!-- Error Message -->
     <div class="error-message" *ngIf="submitError">
-      ❌ {{ submitError }}
+      ⚠ {{ submitError }}
     </div>
 
     <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="contact-form">
@@ -94,7 +100,6 @@
           <input type="text"
                  id="name"
                  name="name"
-                 data-testid="contact-name"
                  [(ngModel)]="form.name"
                  placeholder="Dit navn"
                  required>
@@ -104,7 +109,6 @@
           <input type="email"
                  id="email"
                  name="email"
-                 data-testid="contact-email"
                  [(ngModel)]="form.email"
                  placeholder="din@email.dk"
                  required>
@@ -122,7 +126,6 @@
         <label for="message">Besked *</label>
         <textarea id="message"
                   name="message"
-                  data-testid="contact-message"
                   [(ngModel)]="form.message"
                   rows="6"
                   placeholder="Skriv din besked her..."
@@ -130,7 +133,6 @@
       </div>
       <button type="submit"
               class="submit-btn"
-              data-testid="submit-contact"
               [disabled]="isSubmitting || !isFormValid()">
         {{ isSubmitting ? 'Sender...' : 'Send besked' }}
       </button>

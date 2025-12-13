@@ -121,6 +121,9 @@ describe('ContactComponent', () => {
         subject: 'Test Emne',
         message: 'Dette er en test besked'
       }));
+      
+      // Flush the 5 second setTimeout from the component
+      tick(5000);
     }));
 
     it('should set submitSuccess to true on success', fakeAsync(() => {
@@ -131,6 +134,9 @@ describe('ContactComponent', () => {
       tick();
 
       expect(component.submitSuccess).toBeTrue();
+      
+      // Flush the 5 second setTimeout from the component
+      tick(5000);
     }));
 
     it('should reset form on success', fakeAsync(() => {
@@ -142,6 +148,9 @@ describe('ContactComponent', () => {
 
       expect(component.form.name).toBe('');
       expect(component.form.message).toBe('');
+      
+      // Flush the 5 second setTimeout from the component
+      tick(5000);
     }));
 
     it('should set submitError on failure', fakeAsync(() => {

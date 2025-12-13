@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { QuickReservationComponent } from './quick-reservation.component';
 
 describe('QuickReservationComponent', () => {
@@ -8,7 +8,7 @@ describe('QuickReservationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [QuickReservationComponent]
+      imports: [QuickReservationComponent, HttpClientTestingModule]
     })
     .compileComponents();
     

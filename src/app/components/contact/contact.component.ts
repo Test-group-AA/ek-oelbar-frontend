@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContactService, ContactMessage } from '../../services/contact.service';
+import { WeatherWidgetComponent } from '../weather-widget/weather-widget.component';
 
 export interface ContactForm {
   name: string;
@@ -14,7 +15,7 @@ export interface ContactForm {
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, WeatherWidgetComponent],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css'
 })

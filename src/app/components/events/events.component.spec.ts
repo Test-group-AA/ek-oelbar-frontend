@@ -22,7 +22,7 @@ describe('EventsComponent', () => {
       endTime: '23:00:00',
       artist: 'The Copenhagen Jazz Trio',
       description: 'Klassisk jazz i hyggelige omgivelser',
-      emoji: '🎷',
+      emoji: 'ðŸŽ·',
       freeEntry: true,
       reservationRequired: false
     },
@@ -34,7 +34,7 @@ describe('EventsComponent', () => {
       endTime: '21:30:00',
       artist: 'Den Mystiske Magnus',
       description: 'Fantastisk close-up magi ved bordene',
-      emoji: '🎩',
+      emoji: 'ðŸŽ©',
       freeEntry: true,
       reservationRequired: false
     }
