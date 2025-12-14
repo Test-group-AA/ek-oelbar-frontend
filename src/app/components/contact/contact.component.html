@@ -71,7 +71,7 @@
         <p><strong>Cykel:</strong> Cykelparkeringsstativer udenfor</p>
       </div>
 
-      <!-- NEW: Weather Widget -->
+      <!-- Weather Widget -->
       <div class="weather-section">
         <h3>🌤️ Vejret lige nu</h3>
         <app-weather-widget></app-weather-widget>
@@ -101,9 +101,11 @@
                  id="name"
                  name="name"
                  [(ngModel)]="form.name"
+                 (blur)="validateField('name')"
                  placeholder="Dit navn"
-                 required
+                 [class.input-error]="formErrors.name"
                  data-testid="contact-name">
+          <span class="field-error" *ngIf="formErrors.name">{{ formErrors.name }}</span>
         </div>
         <div class="form-group">
           <label for="email">E-mail *</label>
@@ -111,9 +113,11 @@
                  id="email"
                  name="email"
                  [(ngModel)]="form.email"
+                 (blur)="validateField('email')"
                  placeholder="din@email.dk"
-                 required
+                 [class.input-error]="formErrors.email"
                  data-testid="contact-email">
+          <span class="field-error" *ngIf="formErrors.email">{{ formErrors.email }}</span>
         </div>
       </div>
       <div class="form-group">
@@ -125,14 +129,17 @@
                placeholder="Hvad drejer det sig om?">
       </div>
       <div class="form-group">
-        <label for="message">Besked *</label>
+        <label for="message">Besked * <span class="char-count">({{ getMessageLength() }}/2000)</span></label>
         <textarea id="message"
                   name="message"
                   [(ngModel)]="form.message"
+                  (blur)="validateField('message')"
                   rows="6"
                   placeholder="Skriv din besked her..."
-                  required
+                  maxlength="2000"
+                  [class.input-error]="formErrors.message"
                   data-testid="contact-message"></textarea>
+        <span class="field-error" *ngIf="formErrors.message">{{ formErrors.message }}</span>
       </div>
       <button type="submit"
               class="submit-btn"

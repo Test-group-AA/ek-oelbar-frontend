@@ -1,9 +1,15 @@
-// src/app/components/quick-reservation/quick-reservation.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
+import { ValidationService } from '../../services/validation.service';
 import { Event } from '../../models/event.model';
+
+export interface ReservationFormErrors {
+  customerName: string | null;
+  customerEmail: string | null;
+  numberOfGuests: string | null;
+}
 
 @Component({
   selector: 'app-quick-reservation',
@@ -29,7 +35,16 @@ export class QuickReservationComponent {
     numberOfGuests: 1
   };
 
-  constructor(private reservationService: ReservationService) {}
+  formErrors: ReservationFormErrors = {
+    customerName: null,
+    customerEmail: null,
+    numberOfGuests: null
+  };
+
+  constructor(
+    private reservationService: ReservationService,
+    private validationService: ValidationService
+  ) {}
 
   ngOnInit(): void {
     this.loadAvailableSpots();
@@ -59,18 +74,56 @@ export class QuickReservationComponent {
     }
   }
 
+  validateForm(): boolean {
+    let isValid = true;
+
+    const nameResult = this.validationService.isValidName(this.form.customerName);
+    this.formErrors.customerName = nameResult.error || null;
+    if (!nameResult.valid) isValid = false;
+
+    const emailResult = this.validationService.isValidEmail(this.form.customerEmail);
+    this.formErrors.customerEmail = emailResult.error || null;
+    if (!emailResult.valid) isValid = false;
+
+    const guestResult = this.validationService.isValidGuestCount(this.form.numberOfGuests);
+    this.formErrors.numberOfGuests = guestResult.error || null;
+    if (!guestResult.valid) isValid = false;
+
+    return isValid;
+  }
+
+  validateField(field: 'customerName' | 'customerEmail' | 'numberOfGuests'): void {
+    switch (field) {
+      case 'customerName':
+        const nameResult = this.validationService.isValidName(this.form.customerName);
+        this.formErrors.customerName = nameResult.error || null;
+        break;
+      case 'customerEmail':
+        const emailResult = this.validationService.isValidEmail(this.form.customerEmail);
+        this.formErrors.customerEmail = emailResult.error || null;
+        break;
+      case 'numberOfGuests':
+        const guestResult = this.validationService.isValidGuestCount(this.form.numberOfGuests);
+        this.formErrors.numberOfGuests = guestResult.error || null;
+        break;
+    }
+  }
+
   onSubmit(): void {
-    if (!this.isFormValid() || this.isSubmitting) {
+    if (this.isSubmitting) return;
+
+    this.submitError = '';
+
+    if (!this.validateForm()) {
       return;
     }
 
     this.isSubmitting = true;
-    this.submitError = '';
 
     this.reservationService.createReservation({
       eventId: this.event.id!,
-      customerName: this.form.customerName,
-      customerEmail: this.form.customerEmail,
+      customerName: this.form.customerName.trim(),
+      customerEmail: this.form.customerEmail.trim(),
       numberOfGuests: this.form.numberOfGuests
     }).subscribe({
       next: () => {
@@ -91,12 +144,10 @@ export class QuickReservationComponent {
   }
 
   isFormValid(): boolean {
-    return !!(
-      this.form.customerName.trim() &&
-      this.form.customerEmail.trim() &&
-      this.form.numberOfGuests >= 1 &&
-      this.form.numberOfGuests <= 20
-    );
+    const nameResult = this.validationService.isValidName(this.form.customerName);
+    const emailResult = this.validationService.isValidEmail(this.form.customerEmail);
+    const guestResult = this.validationService.isValidGuestCount(this.form.numberOfGuests);
+    return nameResult.valid && emailResult.valid && guestResult.valid;
   }
 
   resetForm(): void {
@@ -104,6 +155,11 @@ export class QuickReservationComponent {
       customerName: '',
       customerEmail: '',
       numberOfGuests: 1
+    };
+    this.formErrors = {
+      customerName: null,
+      customerEmail: null,
+      numberOfGuests: null
     };
     this.submitError = '';
   }

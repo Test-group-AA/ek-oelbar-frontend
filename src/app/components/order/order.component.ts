@@ -1,10 +1,10 @@
-// src/app/components/order/order.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
 import { BeerService } from '../../services/beer.service';
 import { CartService } from '../../services/cart.service';
+import { ValidationService } from '../../services/validation.service';
 import { Order, OrderLine, OrderStatus } from '../../models/order.model';
 import { Beer } from '../../models/beer.model';
 
@@ -20,7 +20,7 @@ export class OrderComponent implements OnInit {
   currentOrder: Order | null = null;
   orderLines: OrderLine[] = [];
   
-  customerAge: number = 18;
+  customerAge: number | null = null;
   hasStudentCard: boolean = false;
   selectedBeerId: number | null = null;
   quantity: number = 1;
@@ -28,20 +28,18 @@ export class OrderComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
   success: string | null = null;
+  
+  ageError: string | null = null;
 
   constructor(
     private orderService: OrderService,
     private beerService: BeerService,
-    public cartService: CartService
+    public cartService: CartService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit(): void {
     this.loadBeers();
-    
-    // Auto-create order if cart has items
-    if (this.cartService.getCartCount() > 0 && !this.currentOrder) {
-      // Show cart items preview
-    }
   }
 
   loadBeers(): void {
@@ -51,17 +49,25 @@ export class OrderComponent implements OnInit {
     });
   }
 
+  validateAge(): boolean {
+    const result = this.validationService.isValidAge(this.customerAge);
+    this.ageError = result.error || null;
+    return result.valid;
+  }
+
   createOrder(): void {
-    if (this.customerAge < 18) {
-      this.error = 'Du skal være mindst 18 år for at bestille';
+    this.error = null;
+    this.ageError = null;
+    
+    if (!this.validateAge()) {
+      this.error = this.ageError;
       return;
     }
 
     this.isLoading = true;
-    this.error = null;
 
     this.orderService.createOrder({
-      customerAge: this.customerAge,
+      customerAge: this.customerAge!,
       hasStudentCard: this.hasStudentCard
     }).subscribe({
       next: (order) => {
@@ -69,8 +75,6 @@ export class OrderComponent implements OnInit {
         this.orderLines = [];
         this.success = 'Ordre oprettet!';
         this.isLoading = false;
-        
-        // Add cart items to order
         this.addCartItemsToOrder();
       },
       error: (err) => {
@@ -87,7 +91,6 @@ export class OrderComponent implements OnInit {
       return;
     }
 
-    // Add each cart item to the order
     cartItems.forEach(item => {
       this.orderService.addBeerToOrder(this.currentOrder!.id!, {
         beerId: item.beer.id!,
@@ -103,12 +106,17 @@ export class OrderComponent implements OnInit {
       });
     });
 
-    // Clear cart after adding to order
     this.cartService.clearCart();
   }
 
   addBeer(): void {
     if (!this.currentOrder || !this.selectedBeerId) return;
+
+    const qtyResult = this.validationService.isValidQuantity(this.quantity);
+    if (!qtyResult.valid) {
+      this.error = qtyResult.error || 'Ugyldigt antal';
+      return;
+    }
 
     this.isLoading = true;
     this.orderService.addBeerToOrder(this.currentOrder.id!, {

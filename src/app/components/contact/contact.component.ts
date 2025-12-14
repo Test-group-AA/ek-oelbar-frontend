@@ -1,8 +1,8 @@
-// src/app/components/contact/contact.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContactService, ContactMessage } from '../../services/contact.service';
+import { ValidationService } from '../../services/validation.service';
 import { WeatherWidgetComponent } from '../weather-widget/weather-widget.component';
 
 export interface ContactForm {
@@ -10,6 +10,12 @@ export interface ContactForm {
   email: string;
   subject: string;
   message: string;
+}
+
+export interface FormErrors {
+  name: string | null;
+  email: string | null;
+  message: string | null;
 }
 
 @Component({
@@ -27,23 +33,71 @@ export class ContactComponent {
     message: ''
   };
 
+  formErrors: FormErrors = {
+    name: null,
+    email: null,
+    message: null
+  };
+
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
 
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private validationService: ValidationService
+  ) {}
+
+  validateForm(): boolean {
+    let isValid = true;
+    
+    const nameResult = this.validationService.isValidName(this.form.name);
+    this.formErrors.name = nameResult.error || null;
+    if (!nameResult.valid) isValid = false;
+    
+    const emailResult = this.validationService.isValidEmail(this.form.email);
+    this.formErrors.email = emailResult.error || null;
+    if (!emailResult.valid) isValid = false;
+    
+    const messageResult = this.validationService.isValidMessage(this.form.message);
+    this.formErrors.message = messageResult.error || null;
+    if (!messageResult.valid) isValid = false;
+    
+    return isValid;
+  }
+
+  validateField(field: 'name' | 'email' | 'message'): void {
+    switch (field) {
+      case 'name':
+        const nameResult = this.validationService.isValidName(this.form.name);
+        this.formErrors.name = nameResult.error || null;
+        break;
+      case 'email':
+        const emailResult = this.validationService.isValidEmail(this.form.email);
+        this.formErrors.email = emailResult.error || null;
+        break;
+      case 'message':
+        const messageResult = this.validationService.isValidMessage(this.form.message);
+        this.formErrors.message = messageResult.error || null;
+        break;
+    }
+  }
 
   onSubmit(): void {
     if (this.isSubmitting) return;
-    if (!this.isFormValid()) return;
+    
+    this.submitError = '';
+    
+    if (!this.validateForm()) {
+      return;
+    }
 
     this.isSubmitting = true;
-    this.submitError = '';
 
     const message: ContactMessage = {
-      name: this.form.name,
-      email: this.form.email,
-      subject: this.form.subject,
+      name: this.form.name.trim(),
+      email: this.form.email.trim(),
+      subject: this.form.subject.trim(),
       message: this.form.message
     };
 
@@ -63,7 +117,10 @@ export class ContactComponent {
   }
 
   isFormValid(): boolean {
-    return !!(this.form.name && this.form.email && this.form.message);
+    const nameResult = this.validationService.isValidName(this.form.name);
+    const emailResult = this.validationService.isValidEmail(this.form.email);
+    const messageResult = this.validationService.isValidMessage(this.form.message);
+    return nameResult.valid && emailResult.valid && messageResult.valid;
   }
 
   resetForm(): void {
@@ -73,5 +130,14 @@ export class ContactComponent {
       subject: '',
       message: ''
     };
+    this.formErrors = {
+      name: null,
+      email: null,
+      message: null
+    };
+  }
+
+  getMessageLength(): number {
+    return this.form.message?.length || 0;
   }
 }
