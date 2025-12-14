@@ -102,7 +102,8 @@
                  name="name"
                  [(ngModel)]="form.name"
                  placeholder="Dit navn"
-                 required>
+                 required
+                 data-testid="contact-name">
         </div>
         <div class="form-group">
           <label for="email">E-mail *</label>
@@ -111,7 +112,8 @@
                  name="email"
                  [(ngModel)]="form.email"
                  placeholder="din@email.dk"
-                 required>
+                 required
+                 data-testid="contact-email">
         </div>
       </div>
       <div class="form-group">
@@ -129,11 +131,13 @@
                   [(ngModel)]="form.message"
                   rows="6"
                   placeholder="Skriv din besked her..."
-                  required></textarea>
+                  required
+                  data-testid="contact-message"></textarea>
       </div>
       <button type="submit"
               class="submit-btn"
-              [disabled]="isSubmitting || !isFormValid()">
+              [disabled]="isSubmitting || !isFormValid()"
+              data-testid="submit-contact">
         {{ isSubmitting ? 'Sender...' : 'Send besked' }}
       </button>
     </form>

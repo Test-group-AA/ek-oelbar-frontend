@@ -40,3 +40,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+cypress/screenshots/user-flow.cy.ts/EK Ølbar - User Flows -- Shopping Flow -- Add to Cart -- should add first beer to cart (failed).png
